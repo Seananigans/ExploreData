@@ -1,0 +1,26 @@
+setwd("H:/My Documents/ExploreData/Project1")
+
+HouseData <- read.table("H:/My Documents/ExploreData/household_power_consumption/household_power_consumption.txt", header= TRUE, sep = ";")
+HouseData$Date <- as.Date(HouseData$Date, format = "%d/%m/%Y")
+HouseData <- HouseData[HouseData$Date>="2007-02-01"&HouseData$Date<="2007-02-02",]
+DateTime <- as.POSIXct(paste(HouseData$Date,HouseData$Time))
+HouseData$DateTime <- DateTime
+HouseData$DateTime <- strptime(HouseData$DateTime, format = "%Y-%m-%d %H:%M:%S")
+HouseData <- HouseData[,3:10]
+for(i in 1:7) {
+  HouseData[,i] <- as.numeric(as.character(HouseData[,i]))
+}
+
+
+#write.table(HouseData, "HousePowerConsumption.txt",sep = "\t")
+#HouseData <- read.table("HousePowerConsumption.txt",sep = "\t", header = TRUE)
+
+#Plot 2
+plot(type="l", 
+     x = HouseData$DateTime, 
+     y = HouseData$Global_active_power,
+     xlab = "",
+     ylab="Global Active Power (kilowatts)"
+)
+dev.copy(png, file = "plot2.png")
+dev.off()
